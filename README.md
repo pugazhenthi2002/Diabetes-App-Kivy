@@ -1,9 +1,10 @@
 # Diabetes-App-Kivy
 This is a Simple App to check the diabetes result.
-If you wanna run the diabetes result script alone, -->choose the **main_diabetes.py**.
-If you wanna run the whole diabetes app, -->choose the **main.py**.
-For Understanding of Program, you can check **main_diabetes.ipynb** and **main.ipynb** file.
-Module Requirement to be installed.
+If you wanna run the diabetes result script alone, -->choose the ```main_diabetes.py```
+If you wanna run the whole diabetes app, -->choose the ```main.py```.
+For Understanding of Program, you can check ```main_diabetes.ipynb``` and ```main.ipynb``` file.
+
+## Module Requirement to be installed.
 <details><summary>Requirements</summary>
 <p>
 
