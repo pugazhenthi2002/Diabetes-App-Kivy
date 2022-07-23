@@ -1,54 +1,95 @@
-import numpy as np
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
+from kivymd.app import MDApp
+from kivy.lang.builder import Builder
+from kivy.uix.screenmanager import Screen, ScreenManager
+from kivy.core.window import Window
+from pandas import read_csv
 from sklearn.model_selection import train_test_split
-from sklearn import svm
-from sklearn.metrics import accuracy_score
+from sklearn.linear_model import LogisticRegression
+from pandas import set_option,DataFrame
 
+filename = r'Diabetes Death Dataset.csv'
+names = ['age','anaemia','creatinine_phosphokinase','gender','ejection_fraction','high_blood_pressure','platelets','serum_creatinine','serum_sodium','smoking','smokesperday','diabetes']
+dataframe = read_csv(filename, names=names, delimiter=';')
+array = dataframe.values
+X = array[:,0:11]
+Y = array[:,11]
+test_size = 0.33
+seed = 7
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=test_size,random_state=seed)
+model = LogisticRegression()
+model.fit(X_train, Y_train)
+result = model.score(X_test, Y_test)
+
+def user_report(age,anaemia,creatinine_phosphokinase,gender,ejection_fraction,high_blood_pressure,platelets,serum_creatinine,serum_sodium,smoking,smokesperday):
+     age_data = float(age)
+     anaemia_data = float(anaemia)
+     creatinine_phosphokinase_data = float(creatinine_phosphokinase)
+     gender_data = float(gender)
+     ejection_fraction_data = float(ejection_fraction)
+     high_blood_pressure_data = float(high_blood_pressure)
+     platelets_data = float(platelets)
+     serum_creatinine_data = float(serum_creatinine)
+     serum_sodium_data = float(serum_sodium)
+     smoking_data = float(smoking)
+     smokesperday_data = float(smokesperday)
   
+     user_report_data = {
+        'age_data':age_data,
+        'anaemia_data':anaemia_data,
+        'creatinine_phosphokinase_data':creatinine_phosphokinase_data,
+    	'gender_data':gender_data,
+    	'ejection_fraction_data':ejection_fraction_data,
+    	'high_blood_pressure_data':high_blood_pressure_data,
+    	'platelets_data':platelets_data,
+    	'serum_creatinine_data':serum_creatinine_data,
+        'serum_sodium_data':serum_sodium_data,
+        'smoking_data':smoking_data,
+        'smokesperday_data':smokesperday_data
+	 }
+     report_data = pd.DataFrame(user_report_data, index=[0])
+     return report_data
 
-def diabetes():
-  ds = pd.read_csv('C:/Users/IRPT/Desktop/Diabetes App/Diabetes Death Dataset.csv') 
-  X = ds.drop(['Diabetes'],axis=1)
-  Y = ds['Diabetes']
+class Main(Screen):
+    pass
 
-  sc = StandardScaler()
-  sc.fit(X)
-  std_data = sc.transform(X)
-  X = std_data
-  Y = ds['Diabetes']
+sm = ScreenManager()
+sm.add_widget(Main(name='main'))
 
-  X_train, X_test, Y_train, Y_test = train_test_split(X,Y, test_size = 0.2, stratify=Y, random_state=2)
 
-  classifier = svm.SVC(kernel='linear')
-  classifier.fit(X_train, Y_train)
+class MainApp(MDApp):
+    def build(self):
+        self.help_string = Builder.load_file('main.kv')
+        return self.help_string
 
-  X_train_prediction = classifier.predict(X_train)
-  training_data_accuracy = accuracy_score(X_train_prediction, Y_train)
-  X_test_prediction = classifier.predict(X_test)
-  test_data_accuracy = accuracy_score(X_test_prediction, Y_test)
-
-  a=int(input("Age:\t"))
-  b=int(input("Anaemia:\t"))
-  c=int(input("Creatinine:\t"))
-  d=int(input("Sex:\t"))
-  e=int(input("Ejection Fraction:\t"))
-  f=int(input("High Blood Pressure:\t"))
-  g=int(input("Platelets:\t"))
-  h=float(input("Serum Creatinine:\t"))
-  i=int(input("Serum Sodium:\t"))
-  j=int(input("Smoking:\t"))
-  k=int(input("SmokesperDay:\t"))
-  input_data=tuple([a,b,c,d,e,f,g,h,i,j,k])
-  input_data_as_numpy_array = np.asarray(input_data)
-  input_data_reshaped = input_data_as_numpy_array.reshape(1,-1)
-  std_data = sc.transform(input_data_reshaped)
-  #print(std_data)
-  prediction = classifier.predict(std_data)
-  #print(prediction)
-  if (prediction[0] == 0):
-    print('The person is not diabetic')
-  else:
-    print('The person is diabetic')
-
-diabetes()
+    def predict(self):
+        input_1 = self.help_string.get_screen('main').ids.input_1.text
+        input_2 = self.help_string.get_screen('main').ids.input_2.text
+        input_3 = self.help_string.get_screen('main').ids.input_3.text
+        input_4 = self.help_string.get_screen('main').ids.input_4.text
+        input_5 = self.help_string.get_screen('main').ids.input_5.text
+        input_6 = self.help_string.get_screen('main').ids.input_6.text
+        input_7 = self.help_string.get_screen('main').ids.input_7.text
+        input_8 = self.help_string.get_screen('main').ids.input_8.text
+        input_9 = self.help_string.get_screen('main').ids.input_9.text
+        input_10 = self.help_string.get_screen('main').ids.input_10.text
+        input_11 = self.help_string.get_screen('main').ids.input_11.text
+        
+        user_result_input = user_report(input_1,input_2,input_3,input_4,input_5,input_6,input_7,input_8,input_9,input_10,input_11)
+        
+        user_result_model = model.predict(user_result_input)
+        print(result)
+        
+        output=''
+        self.help_string.get_screen('main').ids.output_text_not.text = ''
+        self.help_string.get_screen('main').ids.output_text_sick.text = ''
+        
+        if user_result_model[0]==0:
+            output = 'You are not Diabetic'
+            self.help_string.get_screen('main').ids.output_text_not.text = output
+            
+        else:
+            output = 'You are Diabetic'
+            self.help_string.get_screen('main').ids.output_text_sick.text = output
+ 
+MainApp().run()
