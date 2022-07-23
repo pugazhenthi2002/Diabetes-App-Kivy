@@ -20,3 +20,10 @@ For Understanding of Program, you can check ```main_diabetes.ipynb``` and ```mai
 
 </p>
 </details>
+
+## Result of Non Diabetic:
+
+<img width="600" alt="Non Diabetes Result" src="https://user-images.githubusercontent.com/105981927/180588047-297038ce-78fd-4f3d-8cb0-8c9e447a96c6.png">
+
+## Result of Diabetic:
+<img width="601" alt="Diabetes Result" src="https://user-images.githubusercontent.com/105981927/180588212-1bbce851-81e5-4344-9e38-7054cf18ba0a.png">
